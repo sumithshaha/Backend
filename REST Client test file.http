@@ -1,0 +1,32 @@
+### Variables
+@baseUrl = http://localhost:3000
+
+### Get HTML page showing all movies
+GET {{baseUrl}}/
+
+### Get all movies
+GET {{baseUrl}}/movies
+
+### Get movie by ID
+GET {{baseUrl}}/movies/1
+
+### Get non-existent movie (should return 404)
+GET {{baseUrl}}/movies/999
+
+### Create a new movie
+POST {{baseUrl}}/movies
+Content-Type: application/json
+
+{
+    "title": "The Godfather",
+    "director": "Francis Ford Coppola",
+    "year": 1972
+}
+
+### Create a movie with missing data (should return 400)
+POST {{baseUrl}}/movies
+Content-Type: application/json
+
+{
+    "title": "Incomplete Movie"
+}
