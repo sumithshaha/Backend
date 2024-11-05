@@ -1,0 +1,94 @@
+{
+	"info": {
+		"_postman_id": "your-generated-id",
+		"name": "Movie Collection API",
+		"description": "A collection for testing the Movie Collection CRUD API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get HTML Page",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "3000",
+					"path": [""]
+				},
+				"description": "Get the HTML page showing all movies"
+			}
+		},
+		{
+			"name": "Get All Movies",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/movies",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "3000",
+					"path": ["movies"]
+				},
+				"description": "Retrieve all movies from the collection"
+			}
+		},
+		{
+			"name": "Get Movie by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/movies/1",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "3000",
+					"path": ["movies", "1"]
+				},
+				"description": "Get a specific movie by its ID"
+			}
+		},
+		{
+			"name": "Add New Movie",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"The Godfather\",\n    \"director\": \"Francis Ford Coppola\",\n    \"year\": 1972\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/movies",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "3000",
+					"path": ["movies"]
+				},
+				"description": "Add a new movie to the collection"
+			}
+		},
+		{
+			"name": "Get Non-existent Movie",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/movies/999",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "3000",
+					"path": ["movies", "999"]
+				},
+				"description": "Attempt to get a movie that doesn't exist (tests error handling)"
+			}
+		}
+	]
+}
