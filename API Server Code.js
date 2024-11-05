@@ -101,6 +101,49 @@ app.get('/movies/:id', (req, res) => {
     }
 });
 
+// PUT /movies/:id - Update a movie
+app.put('/movies/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const { title, director, year } = req.body;
+
+    // Input validation
+    if (!title || !director || !year) {
+        return res.status(400).json({ 
+            error: 'Please provide title, director, and year' 
+        });
+    }
+
+    const movieIndex = movies.findIndex(m => m.id === id);
+    if (movieIndex === -1) {
+        return res.status(404).json({ error: 'Movie not found' });
+    }
+
+    // Update movie
+    const updatedMovie = {
+        id,
+        title,
+        director,
+        year
+    };
+
+    movies[movieIndex] = updatedMovie;
+    res.json(updatedMovie);
+});
+
+// DELETE /movies/:id - Delete a movie
+app.delete('/movies/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const movieIndex = movies.findIndex(m => m.id === id);
+
+    if (movieIndex === -1) {
+        return res.status(404).json({ error: 'Movie not found' });
+    }
+
+    // Remove movie from array
+    movies.splice(movieIndex, 1);
+    res.status(204).send();
+});
+
 // Start the server
 app.listen(port, () => {
     console.log(`Movie API server running at http://localhost:${port}`);
