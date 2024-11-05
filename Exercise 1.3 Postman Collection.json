@@ -1,0 +1,256 @@
+{
+    "info": {
+        "name": "Movie API Collection",
+        "description": "Testing CRUD operations for Movie API",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "1. Read Operations",
+            "item": [
+                {
+                    "name": "Get All Movies",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{baseUrl}}/movies",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["movies"]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response is an array\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(Array.isArray(jsonData)).to.be.true;",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Get Single Movie",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{baseUrl}}/movies/1",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["movies", "1"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "2. Create Operations",
+            "item": [
+                {
+                    "name": "Create New Movie",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 201\", function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "});",
+                                    "",
+                                    "if (pm.response.code === 201) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.environment.set(\"newMovieId\", jsonData.id);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"The Dark Knight\",\n    \"director\": \"Christopher Nolan\",\n    \"year\": 2008\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/movies",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["movies"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "3. Update Operations",
+            "item": [
+                {
+                    "name": "Update Movie",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Movie was updated correctly\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.year).to.equal(2009);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Updated Movie Title\",\n    \"director\": \"Updated Director\",\n    \"year\": 2009\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/movies/{{newMovieId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["movies", "{{newMovieId}}"]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Non-existent Movie",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 404\", function () {",
+                                    "    pm.response.to.have.status(404);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Error message exists\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.have.property('error');",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Invalid Update\",\n    \"director\": \"Test Director\",\n    \"year\": 2020\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/movies/999",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["movies", "999"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "4. Delete Operations",
+            "item": [
+                {
+                    "name": "Delete Movie",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 204\", function () {",
+                                    "    pm.response.to.have.status(204);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "DELETE",
+                        "url": {
+                            "raw": "{{baseUrl}}/movies/{{newMovieId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["movies", "{{newMovieId}}"]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Non-existent Movie",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 404\", function () {",
+                                    "    pm.response.to.have.status(404);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Error message exists\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.have.property('error');",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "DELETE",
+                        "url": {
+                            "raw": "{{baseUrl}}/movies/999",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["movies", "999"]
+                        }
+                    }
+                },
+                {
+                    "name": "Verify Delete",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 404\", function () {",
+                                    "    pm.response.to.have.status(404);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{baseUrl}}/movies/{{newMovieId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["movies", "{{newMovieId}}"]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
