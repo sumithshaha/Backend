@@ -1,0 +1,75 @@
+# REST Client Tests for Movie Collection API
+@baseUrl = http://localhost:3000
+@contentType = application/json
+
+### Variables for testing
+@movieId = 1
+@nonExistentId = 999
+
+### 1. Get HTML Homepage
+# @name getHome
+GET {{baseUrl}}/
+
+### 2. Get All Movies
+# @name getMovies
+GET {{baseUrl}}/movies
+
+### 3. Get Single Movie (Success)
+# @name getMovie
+GET {{baseUrl}}/movies/{{movieId}}
+
+### 4. Get Single Movie (Failure - Non-existent ID)
+# @name getNonExistentMovie
+GET {{baseUrl}}/movies/{{nonExistentId}}
+
+### 5. Create New Movie (Success)
+# @name createMovie
+POST {{baseUrl}}/movies
+Content-Type: {{contentType}}
+
+{
+    "title": "The Godfather",
+    "director": "Francis Ford Coppola",
+    "year": 1972
+}
+
+### 6. Create New Movie (Failure - Missing Required Fields)
+# @name createInvalidMovie
+POST {{baseUrl}}/movies
+Content-Type: {{contentType}}
+
+{
+    "title": "Incomplete Movie Data"
+}
+
+### 7. Create New Movie (Failure - Invalid Year)
+# @name createMovieInvalidYear
+POST {{baseUrl}}/movies
+Content-Type: {{contentType}}
+
+{
+    "title": "Test Movie",
+    "director": "Test Director",
+    "year": "invalid-year"
+}
+
+### 8. Verify Created Movie
+# First, create a movie and store its ID
+# @name createMovieForVerification
+POST {{baseUrl}}/movies
+Content-Type: {{contentType}}
+
+{
+    "title": "The Shawshank Redemption",
+    "director": "Frank Darabont",
+    "year": 1994
+}
+
+### Then get the created movie using its ID
+@createdMovieId = {{createMovieForVerification.response.body.id}}
+GET {{baseUrl}}/movies/{{createdMovieId}}
+
+### 9. Test Response Headers
+# @name checkHeaders
+GET {{baseUrl}}/movies
+Accept: {{contentType}}
