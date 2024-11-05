@@ -1,0 +1,69 @@
+@baseUrl = http://localhost:3000
+@contentType = application/json
+
+### Get all movies
+GET {{baseUrl}}/movies
+
+### Get single movie (id: 1)
+GET {{baseUrl}}/movies/1
+
+### Create new movie
+# @name createMovie
+POST {{baseUrl}}/movies
+Content-Type: {{contentType}}
+
+{
+    "title": "The Dark Knight",
+    "director": "Christopher Nolan",
+    "year": 2008
+}
+
+### Store the ID of the created movie
+@movieId = {{createMovie.response.body.id}}
+
+### Update the movie we just created
+PUT {{baseUrl}}/movies/{{movieId}}
+Content-Type: {{contentType}}
+
+{
+    "title": "The Dark Knight",
+    "director": "Christopher Nolan",
+    "year": 2009
+}
+
+### Try to update non-existent movie
+PUT {{baseUrl}}/movies/999
+Content-Type: {{contentType}}
+
+{
+    "title": "Non-existent Movie",
+    "director": "Unknown Director",
+    "year": 2020
+}
+
+### Delete the movie we created
+DELETE {{baseUrl}}/movies/{{movieId}}
+
+### Verify the movie was deleted
+GET {{baseUrl}}/movies/{{movieId}}
+
+### Try to delete non-existent movie
+DELETE {{baseUrl}}/movies/999
+
+### Invalid requests for testing error handling
+
+### Create movie with missing fields
+POST {{baseUrl}}/movies
+Content-Type: {{contentType}}
+
+{
+    "title": "Incomplete Movie"
+}
+
+### Update movie with missing fields
+PUT {{baseUrl}}/movies/1
+Content-Type: {{contentType}}
+
+{
+    "title": "Incomplete Update"
+}
