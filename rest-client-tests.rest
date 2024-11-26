@@ -1,0 +1,92 @@
+### Variables
+@baseUrl = http://localhost:3000
+
+### Get HTML movie list (Default route)
+GET {{baseUrl}}/
+
+### Get all movies
+GET {{baseUrl}}/movies
+
+### Get movies with filters
+### Filter by year
+GET {{baseUrl}}/movies?year=2010
+
+### Filter by director
+GET {{baseUrl}}/movies?director=Nolan
+
+### Filter by title
+GET {{baseUrl}}/movies?title=Matrix
+
+### Combined filters
+GET {{baseUrl}}/movies?year=2010&director=Christopher Nolan
+
+### Get specific movie by ID
+GET {{baseUrl}}/movies/67452ff492ba56efba37b8a5
+
+### Create a new movie (valid data)
+POST {{baseUrl}}/movies
+Content-Type: application/json
+
+{
+    "title": "Interstellar",
+    "director": "Christopher Nolan",
+    "year": 2014
+}
+
+### Create a new movie (invalid data - missing fields)
+POST {{baseUrl}}/movies
+Content-Type: application/json
+
+{
+    "title": "Interstellar",
+    "year": 2014
+}
+
+### Create a new movie (invalid year)
+POST {{baseUrl}}/movies
+Content-Type: application/json
+
+{
+    "title": "Future Movie",
+    "director": "John Doe",
+    "year": 2025
+}
+
+### Update existing movie
+PUT {{baseUrl}}/movies/67454e198a33e08c86d09899
+Content-Type: application/json
+
+{
+    "title": "Inception - Director's Cut",
+    "director": "Christopher Nolan",
+    "year": 2010
+}
+
+### Update non-existent movie
+PUT {{baseUrl}}/movies/999
+Content-Type: application/json
+
+{
+    "title": "Non-existent Movie",
+    "director": "Unknown Director",
+    "year": 2020
+}
+
+### Delete existing movie
+DELETE {{baseUrl}}/movies/6745485194507e6e585f0a21
+
+### Delete non-existent movie
+DELETE {{baseUrl}}/movies/999
+
+### Test undefined route
+GET {{baseUrl}}/undefined-route
+
+### Complex filtering scenarios
+### Multiple partial matches
+GET {{baseUrl}}/movies?director=Chris
+
+### Case insensitive search
+GET {{baseUrl}}/movies?title=matrix
+
+### Year range (if implemented)
+GET {{baseUrl}}/movies?year=2010&director=nolan
